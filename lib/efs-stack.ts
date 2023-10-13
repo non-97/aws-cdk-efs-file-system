@@ -1,16 +1,24 @@
-import * as cdk from 'aws-cdk-lib';
-import { Construct } from 'constructs';
-// import * as sqs from 'aws-cdk-lib/aws-sqs';
+import * as cdk from "aws-cdk-lib";
+import { Construct } from "constructs";
+import { Vpc } from "./constructs/vpc";
+import { Ec2Instance } from "./constructs/ec2";
+import { Efs } from "./constructs/efs";
 
 export class EfsStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    // The code that defines your stack goes here
+    // VPC
+    const vpc = new Vpc(this, "Vpc");
 
-    // example resource
-    // const queue = new sqs.Queue(this, 'EfsQueue', {
-    //   visibilityTimeout: cdk.Duration.seconds(300)
-    // });
+    // EC2 Instance
+    new Ec2Instance(this, "Ec2 Instance A", {
+      vpc: vpc.vpc,
+    });
+
+    // EFS
+    new Efs(this, "Efs", {
+      vpc: vpc.vpc,
+    });
   }
 }
